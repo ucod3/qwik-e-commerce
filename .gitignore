@@ -4,6 +4,12 @@
 /lib-types
 /server
 
+# Supabase
+.branches
+.temp
+.env
+
+
 # Development
 node_modules
 *.local

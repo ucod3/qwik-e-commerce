@@ -24,21 +24,32 @@
     "lint": "eslint \"src/**/*.ts*\"",
     "preview": "qwik build preview && vite preview --open",
     "start": "vite --open --mode ssr",
+    "supabase": "supabase",
     "qwik": "qwik"
   },
   "devDependencies": {
     "@builder.io/qwik": "^1.8.0",
     "@builder.io/qwik-city": "^1.8.0",
+    "@orama/orama": "^1.2.11",
     "@types/eslint": "8.56.10",
     "@types/node": "20.14.11",
     "@typescript-eslint/eslint-plugin": "7.16.1",
     "@typescript-eslint/parser": "7.16.1",
+    "autoprefixer": "^10.4.20",
     "eslint": "8.57.0",
     "eslint-plugin-qwik": "^1.8.0",
+    "postcss": "^8.4.41",
     "prettier": "3.3.3",
+    "prettier-plugin-tailwindcss": "^0.5.14",
+    "supabase": "^1.190.0",
+    "supabase-auth-helpers-qwik": "^0.0.3",
+    "tailwindcss": "3.3.3",
     "typescript": "5.4.5",
-    "undici": "*",
+    "undici": "^6.19.7",
     "vite": "5.3.5",
-    "vite-tsconfig-paths": "^4.2.1"
+    "vite-tsconfig-paths": "^4.3.2"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.1"
   }
 }

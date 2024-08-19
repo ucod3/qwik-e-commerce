@@ -8,9 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@stripe/stripe-js':
+        specifier: ^4.3.0
+        version: 4.3.0
       '@supabase/supabase-js':
         specifier: ^2.45.1
         version: 2.45.1
+      stripe:
+        specifier: ^16.8.0
+        version: 16.8.0
     devDependencies:
       '@builder.io/qwik':
         specifier: ^1.8.0
@@ -502,6 +508,10 @@ packages:
     resolution: {integrity: sha512-aJ1EJSuTdGnM6qbVC4B5DSmozPTqIag9fSzXRNNo+humQLG89XpPgdt16Ia56ORD7s+H8Pmyx44uczDQ0yDzpg==}
     cpu: [x64]
     os: [win32]
+
+  '@stripe/stripe-js@4.3.0':
+    resolution: {integrity: sha512-bf8MxzzgD3dybtyIJUQSDMqxjEkJfsmj9IdRqDv609Zw08R41O7eoIy0f8KY41u8MbaFOYsn+XGJZtg1xwR2wQ==}
+    engines: {node: '>=12.16'}
 
   '@supabase/auth-helpers-shared@0.3.4':
     resolution: {integrity: sha512-8I3D0SPHHexkFTSfPg0nZgJSVazWoB3tZDpT6IjRv6w89vDMUzO99Lit4H9anVLF4teW8c/nJJxawDNbDlgbgg==}
@@ -1805,6 +1815,10 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
+  qs@6.13.0:
+    resolution: {integrity: sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==}
+    engines: {node: '>=0.6'}
+
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
@@ -1953,6 +1967,10 @@ packages:
   strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
+
+  stripe@16.8.0:
+    resolution: {integrity: sha512-6rOIcGOkxcc29jvhEyOYmpPFilekOBV+7vpemAoIAfbtCRW1yxzdDGM0/0vyekHglLL+wqGpP5ldrhO3dJ2JEQ==}
+    engines: {node: '>=12.*'}
 
   style-to-object@0.4.4:
     resolution: {integrity: sha512-HYNoHZa2GorYNyqiCaBgsxvcJIn7OHq6inEga+E6Ke3m5JkoqpQbnFssk4jwe+K7AhGa2fcha4wSOf1Kn01dMg==}
@@ -2588,6 +2606,8 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.20.0':
     optional: true
+
+  '@stripe/stripe-js@4.3.0': {}
 
   '@supabase/auth-helpers-shared@0.3.4(@supabase/supabase-js@2.45.1)':
     dependencies:
@@ -4195,6 +4215,10 @@ snapshots:
 
   punycode@2.3.1: {}
 
+  qs@6.13.0:
+    dependencies:
+      side-channel: 1.0.6
+
   queue-microtask@1.2.3: {}
 
   read-cache@1.0.0:
@@ -4411,6 +4435,11 @@ snapshots:
       ansi-regex: 6.0.1
 
   strip-json-comments@3.1.1: {}
+
+  stripe@16.8.0:
+    dependencies:
+      '@types/node': 20.14.11
+      qs: 6.13.0
 
   style-to-object@0.4.4:
     dependencies:

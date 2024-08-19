@@ -17,12 +17,13 @@ export const useUser = routeLoader$(async (requestEv) => {
   return error ? null : data.user;
 });
 
-type Product = {
+export type Product = {
   id: number;
   name: string;
   description: string;
   price: number;
   image: string;
+  slug: string;
 };
 let oramaDb: Orama;
 export const useProducts = routeLoader$(async () => {

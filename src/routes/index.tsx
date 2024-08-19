@@ -110,7 +110,7 @@ export default component$(() => {
                   src={`/images/${product.image}`}
                   alt={product.name}
                   onClick$={() => {
-                    // navigate(`/detail/${product.slug}`);
+                    navigate(`/detail/${product.slug}`);
                   }}
                 />
               </div>

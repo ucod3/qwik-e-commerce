@@ -1,10 +1,11 @@
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { $, component$, useSignal } from "@builder.io/qwik";
+import { $, component$, useContext, useSignal } from "@builder.io/qwik";
 import { routeLoader$, server$, useNavigate } from "@builder.io/qwik-city";
 import type { Orama } from "@orama/orama";
 import { create, insert, search } from "@orama/orama";
 import { IconShoppingCart } from "~/components/IconShoppingCart";
 import { supabaseClient } from "~/utils/supabase";
+import { STORE_CONTEXT } from "./layout";
 
 export const useUser = routeLoader$(async (requestEv) => {
   const supabaseAccessToken = requestEv.cookie.get("supabase_access_token");
@@ -25,7 +26,8 @@ export type Product = {
   image: string;
   slug: string;
 };
-let oramaDb: Orama;
+
+let oramaDb: Orama ;
 export const useProducts = routeLoader$(async () => {
   const { data } = await supabaseClient.from("products").select("*");
   oramaDb = await create({
@@ -64,6 +66,7 @@ export default component$(() => {
   const productsSig = useProducts();
   const navigate = useNavigate();
   const resultsSig = useSignal<Product[]>(productsSig.value);
+  const store = useContext(STORE_CONTEXT);
 
   const onSearch = $(async (term: string) => {
     if (term === "") {
@@ -138,7 +141,18 @@ export default component$(() => {
                       "disabled:bg-disabled-300 bg-blue-700 hover:bg-blue-800 active:bg-blue-900",
                     ]}
                     onClick$={() => {
-                      console.log("Add to cart!");
+                      const cartProduct = [...store.cart.products].find(
+                        (p) => p.id === product.id,
+                      );
+                      if (cartProduct) {
+                        cartProduct.quantity += 1;
+                        store.cart.products = [...store.cart.products];
+                      } else {
+                        store.cart.products = [
+                          ...store.cart.products,
+                          { ...product, quantity: 1 },
+                        ];
+                      }
                     }}
                   >
                     <IconShoppingCart />

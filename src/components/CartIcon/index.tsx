@@ -1,5 +1,5 @@
 import { component$, useComputed$, useContext } from "@builder.io/qwik";
-// import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import { STORE_CONTEXT, useUser } from "~/routes/layout";
 
 export const CartIcon = component$(() => {
@@ -14,21 +14,21 @@ export const CartIcon = component$(() => {
         class="focus-visible:outline-offset disabled:text-disabled-500 disabled:bg-disabled-300 text-primary-700 hover:bg-primary-100 hover:text-primary-800 active:bg-primary-200 active:text-primary-900 bg-primary-700 hover:bg-primary-800 active:bg-primary-900 -ml-0.5 mr-2 inline-flex items-center justify-center gap-2 rounded-md p-2 text-base font-medium text-white hover:text-white focus-visible:outline active:text-white disabled:cursor-not-allowed disabled:bg-transparent disabled:shadow-none disabled:ring-0"
         data-testid="button"
         aria-label="cart icon"
-        // onClick$={async () => {
-        // 	if (userSig.value) {
-        // 		const response = await fetch('/api/process-payment', {
-        // 			method: 'POST',
-        // 			body: JSON.stringify({ products: store.cart.products }),
-        // 		});
-        // 		const { session } = await response.json();
-        // 		const key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
-        // 		const stripe = await loadStripe(key);
-        // 		if (stripe) {
-        // 			await stripe.redirectToCheckout({ sessionId: session.id });
-        // 		}
-        // 	}
-        // }}
-      >
+        onClick$={async () => {
+              if (userSig.value && store.cart.products.length > 0) {
+                const response = await fetch('/api/process-payment', {
+                  method: 'POST',
+                  body: JSON.stringify({ products: store.cart.products }),
+                });
+                const { session } = await response.json();
+                const key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
+                const stripe = await loadStripe(key);
+                if (stripe) {
+                  await stripe.redirectToCheckout({ sessionId: session.id });
+                }
+              }
+            }
+        }>
         <div class="relative inline-flex rounded-full bg-inherit">
           <svg
             viewBox="0 0 24 24"

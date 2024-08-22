@@ -20,6 +20,7 @@ export const useUser = routeLoader$(async (requestEv) => {
 });
 
 
+// @ts-ignore
 let oramaDb: Orama;
 export const useProducts = routeLoader$(async () => {
   const { data } = await supabaseClient.from("products").select("*");

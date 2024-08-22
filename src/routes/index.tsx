@@ -27,7 +27,7 @@ export type Product = {
   slug: string;
 };
 
-let oramaDb: Orama ;
+let oramaDb: Orama;
 export const useProducts = routeLoader$(async () => {
   const { data } = await supabaseClient.from("products").select("*");
   oramaDb = await create({
@@ -80,8 +80,8 @@ export default component$(() => {
   });
   return (
     <div class="flex flex-col items-center p-4">
-        Welcome{" "}
-      {userSig.value ? userSig.value.email : "guest"} 👋
+      Welcome{" "}
+      {userSig.value ? userSig.value.email : "guest"} 👋!
       <div class="w-[400px] py-4">
         <label class="mb-2 block text-center text-lg font-medium text-gray-600">
           Search - eg. plant, water, hot

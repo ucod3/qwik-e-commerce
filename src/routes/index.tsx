@@ -6,6 +6,7 @@ import { create, insert, search } from "@orama/orama";
 import { IconShoppingCart } from "~/components/IconShoppingCart";
 import { supabaseClient } from "~/utils/supabase";
 import { STORE_CONTEXT } from "./layout";
+import type { Product } from '~/utils/store';
 
 export const useUser = routeLoader$(async (requestEv) => {
   const supabaseAccessToken = requestEv.cookie.get("supabase_access_token");
@@ -18,14 +19,6 @@ export const useUser = routeLoader$(async (requestEv) => {
   return error ? null : data.user;
 });
 
-export type Product = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  slug: string;
-};
 
 let oramaDb: Orama;
 export const useProducts = routeLoader$(async () => {

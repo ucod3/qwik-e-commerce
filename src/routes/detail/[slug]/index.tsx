@@ -14,11 +14,11 @@ import {
 import type { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { HeartIcon } from "~/components/HeartIcon";
 import { IconShoppingCart } from "~/components/IconShoppingCart";
-import type { Product } from "~/routes";
+import type { Product } from "~/utils/store";
 import { STORE_CONTEXT, useUser } from "~/routes/layout";
 import { supabaseClient } from "~/utils/supabase";
 
-export const onGet: RequestHandler = async ({ params, next,  cacheControl, }) => {
+export const onGet: RequestHandler = async ({ params, next, cacheControl, }) => {
   await supabaseClient.rpc("increment_views", { page_slug: params.slug });
   await next();
   cacheControl({

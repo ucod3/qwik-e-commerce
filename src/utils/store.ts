@@ -10,10 +10,10 @@ export type Product = {
   id: number;
   name: string;
   description: string;
-  price: string;
+  price: number;
   image: string;
+  slug: string;
 };
-
 export type CartProduct = Product & {
   quantity: number;
 };

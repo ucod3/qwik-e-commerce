@@ -16,9 +16,10 @@ import { HeartIcon } from "~/components/HeartIcon";
 import { IconShoppingCart } from "~/components/IconShoppingCart";
 import type { Product } from "~/utils/store";
 import { STORE_CONTEXT, useUser } from "~/routes/layout";
-import { supabaseClient } from "~/utils/supabase";
+import { createSupabaseClient } from "~/utils/supabase";
 
 export const onGet: RequestHandler = async ({ params, next, cacheControl, }) => {
+  const supabaseClient = await createSupabaseClient();
   await supabaseClient.rpc("increment_views", { page_slug: params.slug });
   await next();
   cacheControl({
@@ -31,6 +32,7 @@ export const onGet: RequestHandler = async ({ params, next, cacheControl, }) => 
 export const useProductDetail = routeLoader$(
   async ({ params, resolveValue }) => {
     const slug = params.slug;
+    const supabaseClient = await createSupabaseClient();
     const { data }: PostgrestSingleResponse<Product[]> = await supabaseClient
       .from("products")
       .select("*")
@@ -43,6 +45,7 @@ export const useProductDetail = routeLoader$(
     let isFavorite = false;
     const user = await resolveValue(useUser);
     if (user) {
+      const supabaseClient = await createSupabaseClient();
       const favoritesResponse = await supabaseClient
         .from("favorites")
         .select("*")
@@ -55,6 +58,7 @@ export const useProductDetail = routeLoader$(
 );
 
 export const useCurentViews = routeLoader$(async ({ params }) => {
+  const supabaseClient = await createSupabaseClient();
   const { data } = await supabaseClient
     .from("page_views")
     .select("views")
@@ -65,10 +69,12 @@ export const useCurentViews = routeLoader$(async ({ params }) => {
 export const changeFavorite = server$(
   async (userId: string, productId: number, isFavorite: boolean) => {
     if (isFavorite) {
+      const supabaseClient = await createSupabaseClient();
       await supabaseClient
         .from("favorites")
         .insert({ user_id: userId, product_id: productId });
     } else {
+      const supabaseClient = await createSupabaseClient();
       await supabaseClient
         .from("favorites")
         .delete()
@@ -90,7 +96,8 @@ export default component$(() => {
   }
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ cleanup }) => {
+  useVisibleTask$(async ({ cleanup }) => {
+    const supabaseClient = await createSupabaseClient();
     const sub = supabaseClient
       .channel("custom-all-channel")
       .on(

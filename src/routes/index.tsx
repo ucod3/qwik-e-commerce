@@ -4,44 +4,68 @@ import { routeLoader$, server$, useNavigate } from "@builder.io/qwik-city";
 import type { Orama } from "@orama/orama";
 import { create, insert, search } from "@orama/orama";
 import { IconShoppingCart } from "~/components/IconShoppingCart";
-import { supabaseClient } from "~/utils/supabase";
+import { createSupabaseClient } from "~/utils/supabase";
 import { STORE_CONTEXT } from "./layout";
 import type { Product } from '~/utils/store';
 
 export const useUser = routeLoader$(async (requestEv) => {
   const supabaseAccessToken = requestEv.cookie.get("supabase_access_token");
-  if (!supabaseAccessToken) {
+  if (!supabaseAccessToken || !supabaseAccessToken.value) {
     return null;
   }
-  const { data, error } = await supabaseClient.auth.getUser(
-    supabaseAccessToken.value,
-  );
-  return error ? null : data.user;
-});
 
+  try {
+    const supabaseClient = await createSupabaseClient();
+    const { data, error } = await supabaseClient.auth.getUser(supabaseAccessToken.value);
+    
+    if (error) {
+      console.error('Error fetching user:', error);
+      return null;
+    }
+
+    return data.user;
+  } catch (error) {
+    console.error('Error in useUser loader:', error);
+    return null;
+  }
+});
 
 // @ts-ignore
 let oramaDb: Orama;
 export const useProducts = routeLoader$(async () => {
-  const { data } = await supabaseClient.from("products").select("*");
-  oramaDb = await create({
-    schema: {
-      id: "string",
-      name: "string",
-      description: "string",
-      price: "number",
-      image: "string",
-    },
-  });
-  if (data) {
-    data.map(async (product: Product) => {
-      await insert(oramaDb, {
-        ...product,
-        id: product.id.toString(),
-      });
+  try {
+    const supabaseClient = await createSupabaseClient();
+    const { data, error } = await supabaseClient.from("products").select("*");
+
+    if (error) {
+      console.error('Error fetching products:', error);
+      return [];
+    }
+
+    oramaDb = await create({
+      schema: {
+        id: "string",
+        name: "string",
+        description: "string",
+        price: "number",
+        image: "string",
+      },
     });
+
+    if (data) {
+      await Promise.all(data.map(async (product: Product) => {
+        await insert(oramaDb, {
+          ...product,
+          id: product.id.toString(),
+        });
+      }));
+    }
+
+    return data as Product[];
+  } catch (error) {
+    console.error('Error in useProducts loader:', error);
+    return [];
   }
-  return data as Product[];
 });
 
 export const execSearch = server$(async (term: string) => {

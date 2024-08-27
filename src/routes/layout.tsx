@@ -8,7 +8,7 @@ import {
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { NavbarTop } from "~/components/NavbarTop";
 import type { Store } from "~/utils/store";
-import { supabaseClient } from "~/utils/supabase";
+import { createSupabaseClient } from "~/utils/supabase";
 import type { RequestHandler } from "@builder.io/qwik-city";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
@@ -26,13 +26,24 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 
 export const useUser = routeLoader$(async (requestEv) => {
   const supabaseAccessToken = requestEv.cookie.get("supabase_access_token");
-  if (!supabaseAccessToken) {
+  if (!supabaseAccessToken || !supabaseAccessToken.value) {
     return null;
   }
-  const { data, error } = await supabaseClient.auth.getUser(
-    supabaseAccessToken.value,
-  );
-  return error ? null : data.user;
+
+  try {
+    const supabaseClient = await createSupabaseClient();
+    const { data, error } = await supabaseClient.auth.getUser(supabaseAccessToken.value);
+    
+    if (error) {
+      console.error('Error fetching user:', error);
+      return null;
+    }
+
+    return data.user;
+  } catch (error) {
+    console.error('Error in useUser loader:', error);
+    return null;
+  }
 });
 
 export const STORE_CONTEXT = createContextId<Store>("STORE_CONTEXT");

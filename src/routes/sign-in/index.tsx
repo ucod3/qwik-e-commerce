@@ -1,9 +1,11 @@
 import { component$ } from "@builder.io/qwik";
 import { Form, Link, routeAction$, z, zod$ } from "@builder.io/qwik-city";
-import { supabaseClient } from "~/utils/supabase";
+import { createSupabaseClient} from "~/utils/supabase";
 
 export const useSignInAction = routeAction$(
   async ({ email, password }, requestEv) => {
+    const supabaseClient = await createSupabaseClient();
+    
     const { data } = await supabaseClient.auth.signInWithPassword({
       email,
       password,

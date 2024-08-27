@@ -1,6 +1,6 @@
 import { component$, useSignal } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
-import { supabaseClient } from "~/utils/supabase";
+import { createSupabaseClient } from "~/utils/supabase";
 
 export default component$(() => {
   const emailSig = useSignal("");
@@ -43,6 +43,7 @@ export default component$(() => {
               type="submit"
               class="w-full rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white outline-none ring-4 ring-blue-500 hover:bg-blue-700"
               onClick$={async () => {
+                const supabaseClient = await createSupabaseClient();
                 const { error } = await supabaseClient.auth.signUp({
                   email: emailSig.value,
                   password: passwordSig.value,
